@@ -41,6 +41,7 @@
 #define THRUSTER_NUM 6          //推进器数量
 #define THRUSTER_MAX_RPM 3000   //推进器最大转速
 #define THRUSTER_POLAR_PARIS_NUM 3  //推进器极对数
+#define THRUSTER_SLOW 3.95f //推进器减速比
 
 #define Thruster_Vertical_Left_ID 0x3d          //竖直方向左推进器
 #define Thruster_Vertical_Right_ID 0x3e         //竖直方向右推进器

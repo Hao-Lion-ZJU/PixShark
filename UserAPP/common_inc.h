@@ -14,6 +14,7 @@ extern "C" {
 
 #include "RobotConfig.h"
 
+#include "detect_task.h"
 
 
 void Main(void);

@@ -70,14 +70,16 @@ void Main(void)
       hooks.free_fn = vPortFree;
       cJSON_InitHooks(&hooks);
     }/*初始化CJSON库的钩子函数，调用FreeRTOS的内存管理接口*/
+    //初始化检测线程
+    detetc_task_start();
     // Init all communication staff, including USB-VCP/UART/TCP etc.
     commuication_task_start();
 
     cabin_info_task_start();
-    imu_task_start();
+    // imu_task_start();
+    // altimeter_task_start();
+    // depth_task_start();
     led_task_start();
-    altimeter_task_start();
-    depth_task_start();
     thruster_task_start();
     servo_task_start();
     // while (1)

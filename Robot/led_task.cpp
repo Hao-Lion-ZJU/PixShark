@@ -44,14 +44,18 @@ static void led_task(void const * argument)
         while (ulTaskNotifyTake(pdTRUE, portMAX_DELAY) != pdPASS)//
         {
         }
-        uint8_t brightness_level = *led_brightnessPtr/255*10;
+        uint8_t brightness_level = *led_brightnessPtr/255.0*10.0;
         while (current_brightness_level != brightness_level)
         {
-            if(current_brightness_level < brightness_level)
+            if(current_brightness_level < brightness_level){
                 led->enhance();
-            if(current_brightness_level > brightness_level)
+                current_brightness_level++;
+            } 
+            else if(current_brightness_level > brightness_level){
                 led->weaken();
-            osDelay(1000);
+                current_brightness_level--;
+            }
+            osDelay(100);
         }
     }
     

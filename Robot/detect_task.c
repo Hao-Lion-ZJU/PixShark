@@ -19,7 +19,12 @@
 	
 #include "detect_task.h"
 #include "cmsis_os.h"
-	
+#include "main.h"
+#include "iwdg.h"
+
+extern IWDG_HandleTypeDef hiwdg1;
+static osThreadId detect_task_handle;
+
 /**
   * @brief          get toe error status
   * @param[in]      toe: table of equipment
@@ -35,3 +40,34 @@ bool_t toe_is_error(uint8_t toe)
     return (0);
 }
 
+/**
+  * @brief          ºÏ≤‚»ŒŒÒ
+  * @param[in]      pvParameters: NULL
+  * @retval         none
+  */
+static void detect_task(void const *pvParameters)
+{
+    static uint32_t system_time;
+    system_time = xTaskGetTickCount();
+    while (1)
+    {
+      //Œππ∑
+      HAL_IWDG_Refresh(&hiwdg1);
+      osDelay(1000);
+    }
+}
+
+
+const osThreadDef_t os_thread_def_detetc = {
+    .name = (char*)"detetc",
+    .pthread = detect_task,
+    .tpriority = osPriorityRealtime,
+    .instances = 0,
+    .stacksize = 128
+};
+
+void detetc_task_start(void)
+{
+    detect_task_handle = osThreadCreate(&os_thread_def_detetc, NULL);
+    
+}

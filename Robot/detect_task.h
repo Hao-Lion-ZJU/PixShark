@@ -3,11 +3,11 @@
   * @file       detect_task.c/h
   * @brief      detect error task, judged by receiving data time. provide detect
                 hook function, error exist function.
-  *             ¼ì²â´íÎóÈÎÎñ£¬ Í¨¹ı½ÓÊÕÊı¾İÊ±¼äÀ´ÅĞ¶Ï.Ìá¹© ¼ì²â¹³×Óº¯Êı,´íÎó´æÔÚº¯Êı.        
+  *             ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½.ï¿½á¹© ï¿½ï¿½â¹³ï¿½Óºï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úºï¿½ï¿½ï¿½.        
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     MAR-3-2023     HaoLion(ºÂÁÁÁÁ)    1. done
+  *  V1.0.0     MAR-3-2023     HaoLion(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)    1. done
   *
   @verbatim
   ==============================================================================
@@ -23,11 +23,12 @@
 #define DETECT_TASK_H
 #include "struct_typedef.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define DETECT_TASK_INIT_TIME 57
-#define DETECT_CONTROL_TIME 10
 
-//´íÎóÂëÒÔ¼°¶ÔÓ¦Éè±¸Ë³Ğò
+//è®¾å¤‡ç›®å½•
 enum errorList
 {
     TCP_TOE = 0,
@@ -61,55 +62,16 @@ typedef  struct
     bool_t (*data_is_error_fun)(void);
     void (*solve_lost_fun)(void);
     void (*solve_data_error_fun)(void);
-} error_t;
+} dev_error_t;
 
 
-/**
-  * @brief          detect task
-  * @param[in]      pvParameters: NULL
-  * @retval         none
-  */
-/**
-  * @brief          ¼ì²âÈÎÎñ
-  * @param[in]      pvParameters: NULL
-  * @retval         none
-  */
-extern void detect_task(void const *pvParameters);
+extern void detetc_task_start(void);
 
-/**
-  * @brief          get toe error status
-  * @param[in]      toe: table of equipment
-  * @retval         true (eror) or false (no error)
-  */
-/**
-  * @brief          »ñÈ¡Éè±¸¶ÔÓ¦µÄ´íÎó×´Ì¬
-  * @param[in]      toe:Éè±¸Ä¿Â¼
-  * @retval         true(´íÎó) »òÕßfalse(Ã»´íÎó)
-  */
-extern bool_t toe_is_error(uint8_t err);
 
-/**
-  * @brief          record the time
-  * @param[in]      toe: table of equipment
-  * @retval         none
-  */
-/**
-  * @brief          ¼ÇÂ¼Ê±¼ä
-  * @param[in]      toe:Éè±¸Ä¿Â¼
-  * @retval         none
-  */
-extern void detect_hook(uint8_t toe);
 
-/**
-  * @brief          get error list
-  * @param[in]      none
-  * @retval         the point of error_list
-  */
-/**
-  * @brief          µÃµ½´íÎóÁĞ±í
-  * @param[in]      none
-  * @retval         error_listµÄÖ¸Õë
-  */
-extern const error_t *get_error_list_point(void);
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif

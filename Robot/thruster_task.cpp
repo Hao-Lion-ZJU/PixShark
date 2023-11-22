@@ -47,12 +47,10 @@ static void thruster_task(void const * argument)
     can_filter_init();
     for(;;)
     {
-        //等待控制指令
-        if(ulTaskNotifyTake(pdTRUE, 0) != pdPASS)
         for(int i =0 ; i < THRUSTER_NUM; i++)
         {
             osDelay(5);
-            thrustersPtr[i]->set_thruster_expect_speed(1000);//thruster_cmd[i];
+            thrustersPtr[i]->set_thruster_expect_speed(thruster_cmd[i]);//;
         }
 
     }

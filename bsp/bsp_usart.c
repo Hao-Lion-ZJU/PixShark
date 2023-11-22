@@ -72,7 +72,7 @@ void bsp_usart_transmit(UARTChannel_t uart_channel,uint8_t *data, uint16_t len)
         break;
     case CHANNEL_USART2:
         //stm32的485硬件流控在使用DMA的时候有些问题，切勿连续发送
-        // HAL_UART_Transmit(&huart2, data, len, 100);
+        // HAL_UART_Transmit(&huart2, data, len, 1000);
         usart2_tx_dma_enable(data, len);
         break;
     case CHANNEL_USART3:

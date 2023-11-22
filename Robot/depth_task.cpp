@@ -125,7 +125,7 @@ void depth_irq_callback(void)
 const osThreadDef_t os_thread_def_depth = {
     .name = (char*)"depth",
     .pthread = depth_task,
-    .tpriority = osPriorityRealtime,
+    .tpriority = osPriorityHigh,
     .instances = 0,
     .stacksize = 128
 };
@@ -133,7 +133,7 @@ const osThreadDef_t os_thread_def_depth = {
 const osThreadDef_t os_thread_def_depth_request = {
     .name = (char*)"depth_request",
     .pthread = depth_request_task,
-    .tpriority = osPriorityNormal,
+    .tpriority = osPriorityHigh,
     .instances = 0,
     .stacksize = 128
 };

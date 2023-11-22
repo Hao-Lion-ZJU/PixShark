@@ -4,7 +4,7 @@ ___
 本项目采用cmake + make + arm-none-eabi-gcc 交叉编译工具链开发，下载程序到单片机使用openocd
 `请事先下载好对应环境`</br>
 **Linux环境安装**</br>
-~~sudo apt-get install arm-none-eabi-gcc~~
+~~sudo apt-get install arm-none-eabi-gcc~~</br>
 ~~sudo apt-get install openocd~~
 
 `apt下载的openocd可能版本会比较旧，无法下载H7系列，建议进入openocd官网下载最新版本源码编译`</br>
@@ -44,7 +44,7 @@ win11自带stlink驱动，win10的同学自行安装
 ## 2.食用
 **win环境下需要安装Git**
 ```bash
-git clone git@github.com:Hao-Lion-ZJU/Pixshark.git
+git clone git@github.com:Hao-Lion-ZJU/PixShark.git
 mkdir build -p && cd build
 #windows环境下可能需要指定构建工具，否则win下cmake会自动帮你选择nmake
 #然而这不是我们期望的，所以需要 -G "Unix Makefiles"指定，Linux环境下不需要
@@ -72,6 +72,9 @@ openocd -f ./openocd.cfg -c download
 - 对硬件依赖完全解耦了，可以方便以后移植到其他平台的MCU，去除了冗余代码代码也结构化逻辑更加清晰
 - 变量和函数命名方式遵循 Unix/Linux 风格
 - 不需要精确计时的任务，采用自行实现的软件定时器实现，定时精度受任务调度影响
+### 与干端通信
+- PixSharkV1.0采用MQTT通讯协议，c++封装了LWIP自带的MQTT接口，使用更加方便
+- 具体各个设备互传数据采用JSON格式，详见doc文档
 
 ## 4.整体框架
 ### 文件树  

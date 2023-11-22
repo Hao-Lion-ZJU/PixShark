@@ -26,7 +26,9 @@ static AUSServo aus(0x00);
 static void servo_task(void const * argument)
 {
     Servo* servo = &aus;
+    usart2_tx_dma_init();
     const int32_t* servo_dataPtr = NULL;
+    
     servo_dataPtr = get_servo_anglePrt();
     for(;;)
     {

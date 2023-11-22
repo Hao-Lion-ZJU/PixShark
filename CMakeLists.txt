@@ -34,7 +34,7 @@ set(CMAKE_C_STANDARD 11)
 
 # ########################## USER CONFIG SECTION ##############################
 # set up proj
-project(pixshark C CXX ASM) # TODO
+project(PixShark C CXX ASM) # TODO
 set(CMSISDSP components/algorithm) # if using DSP, modify your_dsp_path here
                                   # e.g. set(CMSISDSP Drivers/CMSIS/DSP)
 

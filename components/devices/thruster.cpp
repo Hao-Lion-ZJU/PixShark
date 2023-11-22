@@ -33,7 +33,7 @@ void VESC::write(uint8_t can_packet_id, void * data, int len)
 
 void VESC::set_thruster_expect_speed(int32_t speed)
 {
-    int32_t espeed = speed * THRUSTER_POLAR_PARIS_NUM;  //电转速 = 机械转速 * 极对数
+    int32_t espeed = speed * THRUSTER_POLAR_PARIS_NUM * THRUSTER_SLOW;  //电转速 = 机械转速 * 极对数 * 减速比
     uint8_t data[4];
     data[3] = espeed & 0xff;
     data[2] = (espeed >> 8) & 0xff;

@@ -78,6 +78,8 @@ static void imu_task(void const * argument)
         imu_json.Replace("Angle_x", imu->get_imu_data().Angle_x);
         imu_json.Replace("Angle_y", imu->get_imu_data().Angle_y);
         imu_json.Replace("Angle_z", imu->get_imu_data().Angle_z);
+        std::string data = imu_json.ToFormattedString();
+        publish(IMU_TOPIC, data.c_str(), data.size());
     }
 }
 
@@ -104,7 +106,7 @@ void imu_irq_callback(void)
 const osThreadDef_t os_thread_def_imu = {
     .name = (char*)"imu",
     .pthread = imu_task,
-    .tpriority = osPriorityRealtime,
+    .tpriority = osPriorityHigh,
     .instances = 0,
     .stacksize = 128
 };
@@ -112,5 +114,5 @@ const osThreadDef_t os_thread_def_imu = {
 void imu_task_start(void)
 {
     imu_task_handle = osThreadCreate(&os_thread_def_imu, NULL);
-    
+    static bool is_imu_task_runing = true;
 }

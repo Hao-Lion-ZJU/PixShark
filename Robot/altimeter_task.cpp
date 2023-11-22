@@ -110,7 +110,7 @@ Altimeter* get_altimeter_point(void)
 const osThreadDef_t os_thread_def_altimeter = {
     .name = (char*)"altimeter",
     .pthread = altimeter_task,
-    .tpriority = osPriorityRealtime,
+    .tpriority = osPriorityHigh,
     .instances = 0,
     .stacksize = 128
 };

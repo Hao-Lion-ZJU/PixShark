@@ -81,12 +81,12 @@ void communication_task(const void *arg)
             
         else if(recv_topic.compare(THRUSTER_TOPIC) == 0)
         {
-            result["vertical"].Get("left", thruster_cmd[0]);
-            result["vertical"].Get("right", thruster_cmd[1]);
-            result["horizontal"].Get("top_left", thruster_cmd[2]);
-            result["horizontal"].Get("top_right", thruster_cmd[3]);
-            result["horizontal"].Get("bottom_right", thruster_cmd[4]);
-            result["horizontal"].Get("bottom_left", thruster_cmd[5]);
+            result.Get("vl", thruster_cmd[0]);
+            result.Get("vr", thruster_cmd[1]);
+            result.Get("htl", thruster_cmd[2]);
+            result.Get("htr", thruster_cmd[3]);
+            result.Get("hbr", thruster_cmd[4]);
+            result.Get("hbl", thruster_cmd[5]);
         }
 
         
@@ -118,7 +118,7 @@ bool publish(const char* topic, const char* payload, uint32_t payload_len)
 const osThreadDef_t os_thread_def_commuication = {
     .name = (char*)"commuication",
     .pthread = communication_task,
-    .tpriority = osPriorityRealtime,
+    .tpriority = osPriorityAboveNormal,
     .instances = 0,
     .stacksize = 512
 };
