@@ -43,12 +43,12 @@
 #define THRUSTER_POLAR_PARIS_NUM 3  //推进器极对数
 #define THRUSTER_SLOW 3.95f //推进器减速比
 
-#define Thruster_Vertical_Left_ID 0x3d          //竖直方向左推进器
-#define Thruster_Vertical_Right_ID 0x3e         //竖直方向右推进器
-#define Thruster_Horizontal_TopLeft_ID 0x3f     //水平方向左上推进器
-#define Thruster_Horizontal_TopRight_ID 0x40    //水平方向右上推进器
-#define Thruster_Horizontal_BottomRight_ID 0x41 //水平方向右下推进器
-#define Thruster_Horizontal_BottomLeft_ID 0x42  //水平方向左下推进器
+#define Thruster_Vertical_Left_ID 0x40          //竖直方向左推进器
+#define Thruster_Vertical_Right_ID 0x3f         //竖直方向右推进器
+#define Thruster_Horizontal_TopLeft_ID 0x3e     //水平方向左上推进器
+#define Thruster_Horizontal_TopRight_ID 0x3d    //水平方向右上推进器
+#define Thruster_Horizontal_BottomRight_ID 0x42 //水平方向右下推进器
+#define Thruster_Horizontal_BottomLeft_ID 0x41  //水平方向左下推进器
 
 
 

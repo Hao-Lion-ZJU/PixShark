@@ -8,32 +8,46 @@
 #include <assert.h>
 namespace uuv
 {
-    /**
-     * @brief 复写内存分配算法，使用FreeRTOS的内存分配算法
-     * @tparam T 
-     * @tparam Ts 
-     * @param  params           My Param doc
-     * @return T*
-     */
-    template<typename T, typename... Ts>
-    T* make_malloc(Ts&&... params)
-    {
-        return (T*)(pvPortMalloc(sizeof(T)));
-    }
+  /**
+   * @brief 复写内存分配算法，使用FreeRTOS的内存分配算法
+   * @tparam T 
+   * @tparam Ts 
+   * @param  params           My Param doc
+   * @return T*
+   */
+  template<typename T, typename... Ts>
+  T* make_malloc(Ts&&... params)
+  {
+      return (T*)(pvPortMalloc(sizeof(T)));
+  }
 
-    template <typename T>
 
-  struct is_array_class : std::false_type {};
-  template <typename T, size_t N>
-  struct is_array_class<std::array<T, N>> : std::true_type {};
     
-  
+//限幅函数
+template<typename T>
+void constrain(T& Value, T minValue, T maxValue)
+{
+    if (Value < minValue)
+        Value = minValue;
+    else if (Value > maxValue)
+        Value = maxValue;
+}
+
 
 
 
 
 }
 
+
+//推进器死区
+inline void thruster_deadline(int32_t& Value, uint32_t&& deadline)
+{
+    if (Value < deadline && Value > -deadline)
+    {
+        Value = 0;
+    }
+}
 
 
 /**

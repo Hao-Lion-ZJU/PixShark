@@ -37,7 +37,7 @@ fifo_single::fifo_single(uint32_t uint_cnt)
     fifo_mutexHandle = osMutexCreate(osMutex(fifo_mutex));
 
     //! Allocate Memory for pointer of new FIFO
-    this->p_start_addr = new uint8_t[uint_cnt];
+    this->p_start_addr = (uint8_t*)pvPortMalloc(uint_cnt);
     //! Allocate Failure, exit now
     configASSERT(p_start_addr!=nullptr);
     //! Initialize FIFO Control Block.
@@ -52,7 +52,7 @@ fifo_single::fifo_single(uint32_t uint_cnt)
 fifo_single::~fifo_single()
 {
     configASSERT(p_start_addr!=nullptr);
-    delete[] p_start_addr;
+    vPortFree(p_start_addr);
     p_start_addr = nullptr;
 }
 

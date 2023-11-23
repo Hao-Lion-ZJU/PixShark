@@ -29,7 +29,7 @@ static mqtt::Client* com_nodePtr = NULL;
 
 static uint32 brightness;
 static int32 servo_angle;
-static int32 thruster_cmd[6];
+static int32 thruster_cmd[6] = {100};
 
 
 using namespace std;

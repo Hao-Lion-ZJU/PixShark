@@ -36,7 +36,7 @@ sudo cp stlink/config/udev/rules.d/49-stlinkv* /etc/udev/rules.d/
 openocd：[下载链接](https://github.com/xpack-dev-tools/openocd-xpack/releases/)</br>
 整个windows环境下工具链开发可以参考文章：[参考文章](https://zhuanlan.zhihu.com/p/576972892)</br>
 
-win11自带stlink驱动，win10的同学自行安装
+win的同学自行安装stlink驱动
 
 `项目使用make，所以需要安装mingw，无需安装Ninja作为构建工具`
 
@@ -51,6 +51,8 @@ mkdir build -p && cd build
 cmake -G "Unix Makefiles" ..
 #根据你CPU的最大核心数决定
 make -j8
+#返回主目录
+cd  ..
 #连接仿真器下载,项目使用STLINK，如果更换，请修改openocd.cfg中的配置
 openocd -f ./openocd.cfg -c download
 ```

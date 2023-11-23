@@ -21,7 +21,12 @@
 #include "bsp_can.h"
 #include "RobotConfig.h"
 #include "main.h"
+#include "common.hpp"
+#include "filter.hpp"
 
+#define THRUSTER_CONTROL_PERIOD_MS 5
+#define THRUSTER_FILTER_PARAM 0.3333333333f
+#define THRUSTER_DEADLINE 50
 osThreadId thruster_task_handle;
 
 /**根据水下机器人类型修改*/
@@ -43,14 +48,27 @@ static void thruster_task(void const * argument)
         thrustersPtr[i] = &vescs[i];
     }
     const int32_t* thruster_cmd = get_thruster_cmdPrt();
+    //初始化低通滤波器
+    first_order_filter* filterPtr = new first_order_filter[THRUSTER_NUM]{
+        first_order_filter(THRUSTER_FILTER_PARAM, THRUSTER_CONTROL_PERIOD_MS*THRUSTER_NUM),
+        first_order_filter(THRUSTER_FILTER_PARAM, THRUSTER_CONTROL_PERIOD_MS*THRUSTER_NUM),
+        first_order_filter(THRUSTER_FILTER_PARAM,THRUSTER_CONTROL_PERIOD_MS*THRUSTER_NUM),
+        first_order_filter(THRUSTER_FILTER_PARAM, THRUSTER_CONTROL_PERIOD_MS*THRUSTER_NUM),
+        first_order_filter(THRUSTER_FILTER_PARAM,THRUSTER_CONTROL_PERIOD_MS*THRUSTER_NUM),
+        first_order_filter(THRUSTER_FILTER_PARAM, THRUSTER_CONTROL_PERIOD_MS*THRUSTER_NUM)
+    };
     //初始化can
     can_filter_init();
     for(;;)
     {
         for(int i =0 ; i < THRUSTER_NUM; i++)
         {
-            osDelay(5);
-            thrustersPtr[i]->set_thruster_expect_speed(thruster_cmd[i]);//;
+            osDelay(THRUSTER_CONTROL_PERIOD_MS);
+            //低通滤波
+            int32_t output = (int32_t)filterPtr[i].calc((float)thruster_cmd[i]);
+            //死区
+            thruster_deadline(output, THRUSTER_DEADLINE);
+            thrustersPtr[i]->set_thruster_expect_speed(output);//;
         }
 
     }

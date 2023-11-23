@@ -15,7 +15,6 @@ fp32 invSqrt(fp32 num)
 
 /**
   * @brief          斜波函数初始化
-  * @author         RM
   * @param[in]      斜波函数结构体
   * @param[in]      间隔的时间，单位 s
   * @param[in]      最大值
@@ -33,7 +32,6 @@ void ramp_init(ramp_function_source_t *ramp_source_type, fp32 frame_period, fp32
 
 /**
   * @brief          斜波函数计算，根据输入的值进行叠加， 输入单位为 /s 即一秒后增加输入的值
-  * @author         RM
   * @param[in]      斜波函数结构体
   * @param[in]      输入值
   * @param[in]      滤波参数
@@ -54,7 +52,6 @@ void ramp_calc(ramp_function_source_t *ramp_source_type, fp32 input)
 }
 /**
   * @brief          一阶低通滤波初始化
-  * @author         RM
   * @param[in]      一阶低通滤波结构体
   * @param[in]      间隔的时间，单位 s
   * @param[in]      滤波参数
@@ -70,7 +67,6 @@ void first_order_filter_init(first_order_filter_type_t *first_order_filter_type,
 
 /**
   * @brief          一阶低通滤波计算
-  * @author         RM
   * @param[in]      一阶低通滤波结构体
   * @param[in]      间隔的时间，单位 s
   * @retval         返回空
