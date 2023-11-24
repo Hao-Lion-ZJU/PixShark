@@ -95,20 +95,20 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  SCB->CACR|=1<<2;   //�??启D-chache透写，否则产生莫名其妙错�??
+  SCB->CACR|=1<<2;   //�???坯D-chache逝写，坦则产生莫坝其妙错�???
   /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  HAL_Delay(1000);//等待网卡初始化，否则卡死
+  HAL_Delay(1000);//等待网坡初始化，坦则坡死
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  // MX_IWDG1_Init();
+  MX_IWDG1_Init();
   /* USER CODE BEGIN 2 */
   
   /**?????????????MCU????*/

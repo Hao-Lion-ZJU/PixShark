@@ -25,7 +25,7 @@
 #include "main.h"
 
 #include "CJsonObject.hpp"
-#include "communication_task.hpp"
+#include "mqtt_client.hpp"
 
 static osThreadId depth_task_handle;
 static osThreadId depth_request_task_handle;
@@ -42,6 +42,10 @@ static uint8_t depth_rx_buf[2][2*KELLER::DEPTH_DATA_LENGTH];
 static void depth_task(void const * argument)
 {
     Depth* dm = &keller;
+
+    //初始化mqtt
+    mqtt::Client depth_node = mqtt::Client("depth_node");
+    depth_node.connect(MQTT_SERVER_IP);
 
     neb::CJsonObject depth_json;
     depth_json.Add("depth", (float)0.0);
@@ -75,7 +79,7 @@ static void depth_task(void const * argument)
         //上传数据
         depth_json.Replace("depth", dm->get_depth_data());
         std::string data = depth_json.ToFormattedString();
-        publish(DEPTH_TOPIC, data.c_str(), data.size());
+        depth_node.publish(DEPTH_TOPIC, data.c_str(), data.size());
     }
 
 }

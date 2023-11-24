@@ -148,7 +148,7 @@ void Client::mqtt_pub_request_cb(void *arg, err_t result)
 {
     Client* this_client;
     this_client = (Client*)arg;
-    if(this_client->on_publish_ != NULL)
+    if(this_client->on_publish_ != nullptr)
     {
         
         this_client->on_publish_(this_client, result); 
@@ -160,7 +160,7 @@ void Client::mqtt_sub_request_cb(void *arg, err_t result)
 {
     Client* this_client;
     this_client = (Client*)arg;
-    if(this_client->on_subscribe_ != NULL)
+    if(this_client->on_subscribe_ != nullptr)
     {
         this_client->on_subscribe_(this_client, result); 
     }
@@ -170,7 +170,7 @@ void Client::mqtt_unsub_request_cb(void *arg, err_t result)
 {
     Client* this_client;
     this_client = (Client*)arg;
-    if(this_client->on_unsubscribe_ != NULL)
+    if(this_client->on_unsubscribe_ != nullptr)
     {
         this_client->on_unsubscribe_(this_client, result); 
     }

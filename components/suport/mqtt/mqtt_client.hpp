@@ -59,15 +59,15 @@ public:
         return mqtt_client_is_connected(client_);
     }   
 
-    void(*on_publish_)(void *this_client, err_t result) = {};
+    void(*on_publish_)(void *this_client, err_t result) = nullptr;
 
-    void(*on_subscribe_)(void *this_client, err_t result) = {};
+    void(*on_subscribe_)(void *this_client, err_t result) = nullptr;
 
-    void(*on_unsubscribe_)(void *this_client, err_t result) = {};
+    void(*on_unsubscribe_)(void *this_client, err_t result) = nullptr;
 
-    void(*on_message_)(void *this_client, const char *topic, u32_t tot_len) = {};
+    void(*on_message_)(void *this_client, const char *topic, u32_t tot_len) = nullptr;
 
-    void(*on_data_)(void *this_client, const u8_t *data, u16_t len, u8_t flags) = {};
+    void(*on_data_)(void *this_client, const u8_t *data, u16_t len, u8_t flags) = nullptr;
 
 
 

@@ -26,7 +26,7 @@
 #include "main.h"
 
 #include "CJsonObject.hpp"
-#include "communication_task.hpp"
+#include "mqtt_client.hpp"
 
 static osThreadId imu_task_handle;
 
@@ -40,11 +40,16 @@ static uint8_t imu_rx_buf[2][2*LPMS::IMU_DATA_LENGTH];
 static void imu_task(void const * argument)
 {
     IMU* imu = &lpms;
+
+    //初始化mqtt
+    mqtt::Client imu_node = mqtt::Client("imu_node");
+    imu_node.connect(MQTT_SERVER_IP);
     
     neb::CJsonObject imu_json;
-    imu_json.Add("Angle_x", (float)0.0);
-    imu_json.Add("Angle_y", (float)0.0);
-    imu_json.Add("Angle_z",(float)0.0);
+    imu_json.Add("x", (float)0.0);
+    imu_json.Add("y", (float)0.0);
+    imu_json.Add("z",(float)0.0);
+
 
 
     //初始化串口
@@ -75,11 +80,11 @@ static void imu_task(void const * argument)
         }
         
         //上传数据
-        imu_json.Replace("Angle_x", imu->get_imu_data().Angle_x);
-        imu_json.Replace("Angle_y", imu->get_imu_data().Angle_y);
-        imu_json.Replace("Angle_z", imu->get_imu_data().Angle_z);
+        imu_json.Replace("x", imu->get_imu_data().Angle_x);
+        imu_json.Replace("y", imu->get_imu_data().Angle_y);
+        imu_json.Replace("z", imu->get_imu_data().Angle_z);
         std::string data = imu_json.ToFormattedString();
-        publish(IMU_TOPIC, data.c_str(), data.size());
+        imu_node.publish(IMU_TOPIC, data.c_str(), data.size());
     }
 }
 
@@ -108,7 +113,7 @@ const osThreadDef_t os_thread_def_imu = {
     .pthread = imu_task,
     .tpriority = osPriorityHigh,
     .instances = 0,
-    .stacksize = 128
+    .stacksize = 256
 };
 
 void imu_task_start(void)

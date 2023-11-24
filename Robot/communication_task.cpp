@@ -1,7 +1,7 @@
 /** 
  *****************************Copyright (c) 2023  ZJU****************************
  * @file      : communication_task.cpp
- * @brief     : 
+ * @brief     : 接收上位机的控制指令，包括推进器，舵机，灯光等
  * @history   :
  *  Version     Date            Author          Note
  *  V1.0.0    2023-11-21       Hao Lion        1. <note>
@@ -23,16 +23,24 @@
 static osThreadId commuication_task_handle;
 static std::string recv_topic;
 static std::string pay_load;
-static mqtt::Client* com_nodePtr = NULL;
+static mqtt::Client* recv_nodePtr = NULL;
 
 
 
 static uint32 brightness;
 static int32 servo_angle;
-static int32 thruster_cmd[6] = {100};
+static int32 thruster_cmd[6] = {0};
 
 
 using namespace std;
+
+static void check_connection(void const *argument)
+{
+    if(!recv_nodePtr->isConnected())
+    {
+        recv_nodePtr->connect(MQTT_SERVER_IP);
+    }
+}
 
 static void on_message(void *this_client, const char *topic, u32_t tot_len)
 {
@@ -50,16 +58,21 @@ static void on_data(void *this_client, const u8_t *data, u16_t len, u8_t flags)
 void communication_task(const void *arg)
 {
     //初始化mqtt
-    com_nodePtr = new mqtt::Client(ROBOT_NAME);
-    com_nodePtr->on_message_ = on_message;
-    com_nodePtr->on_data_ = on_data;
+    recv_nodePtr = new mqtt::Client("recv_node");
+    recv_nodePtr->on_message_ = on_message;
+    recv_nodePtr->on_data_ = on_data;
 
-    com_nodePtr->connect(MQTT_SERVER_IP);
+    recv_nodePtr->connect(MQTT_SERVER_IP);
 
-    com_nodePtr->subscribe(LED_TOPIC);
-    // com_nodePtr->subscribe("/crawler");
-    com_nodePtr->subscribe(SERVO_TOPIC);
-    com_nodePtr->subscribe(THRUSTER_TOPIC);
+    recv_nodePtr->subscribe(LED_TOPIC);
+    // recv_nodePtr->subscribe("/crawler");
+    recv_nodePtr->subscribe(SERVO_TOPIC);
+    recv_nodePtr->subscribe(THRUSTER_TOPIC);
+
+    //创建一个定时器，定时检测连接状态了
+    osTimerDef(check_timer, check_connection);
+    osTimerId check_timer_handle = osTimerCreate(osTimer(check_timer), osTimerPeriodic,(void*)0);
+    osTimerStart(check_timer_handle, 5000);  //5s检查一次
 
     for(;;)
     {
@@ -108,11 +121,6 @@ const int32_t* get_servo_anglePrt()
 const int32_t* get_thruster_cmdPrt()
 {
     return thruster_cmd;
-}
-
-bool publish(const char* topic, const char* payload, uint32_t payload_len)
-{
-    return com_nodePtr->publish(topic, payload, payload_len);
 }
 
 const osThreadDef_t os_thread_def_commuication = {

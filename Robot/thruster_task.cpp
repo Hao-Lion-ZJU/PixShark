@@ -67,7 +67,7 @@ static void thruster_task(void const * argument)
             //低通滤波
             int32_t output = (int32_t)filterPtr[i].calc((float)thruster_cmd[i]);
             //死区
-            thruster_deadline(output, THRUSTER_DEADLINE);
+            // thruster_deadline(output, THRUSTER_DEADLINE);
             thrustersPtr[i]->set_thruster_expect_speed(output);//;
         }
 

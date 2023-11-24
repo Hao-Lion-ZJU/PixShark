@@ -25,6 +25,12 @@
 extern IWDG_HandleTypeDef hiwdg1;
 static osThreadId detect_task_handle;
 
+static void feed_dog(void const *argument)
+{
+  //喂狗
+  HAL_IWDG_Refresh(&hiwdg1);
+}
+
 /**
   * @brief          get toe error status
   * @param[in]      toe: table of equipment
@@ -49,11 +55,14 @@ static void detect_task(void const *pvParameters)
 {
     static uint32_t system_time;
     system_time = xTaskGetTickCount();
+    //创建一个定时器，定时喂狗
+    osTimerDef(IWDG, feed_dog);
+    osTimerId IWDG_handle = osTimerCreate(osTimer(IWDG), osTimerPeriodic,(void*)0);
+    feed_dog(NULL);//先喂一次狗
+    osTimerStart(IWDG_handle, 1000);  //
     while (1)
     {
-      //喂狗
-      HAL_IWDG_Refresh(&hiwdg1);
-      osDelay(1000);
+      osDelay(10000);
     }
 }
 

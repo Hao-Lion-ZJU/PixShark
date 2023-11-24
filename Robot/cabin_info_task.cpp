@@ -20,8 +20,7 @@
 #include "bsp_adc.h"
 #include "RobotConfig.h"
 #include "CJsonObject.hpp"
-#include "communication_task.hpp"
-// #include "mqtt_client.hpp"
+#include "mqtt_client.hpp"
 
 static osThreadId sht31_task_handle;
 
@@ -33,6 +32,10 @@ static void cabin_info_task(void const * argument)
     sht31.reset();
     bsp_adc_init();
     vTaskDelay(100);
+    //初始化mqtt
+    mqtt::Client cabin_info_node = mqtt::Client("cabin_info_node");
+    cabin_info_node.connect(MQTT_SERVER_IP);
+
     neb::CJsonObject cabin_info_json;
     cabin_info_json.Add("cabin_temperature", (float)0.0);
     cabin_info_json.Add("cabin_humidity", (float)0.0);
@@ -51,7 +54,7 @@ static void cabin_info_task(void const * argument)
         cabin_info_json.Replace("cpu_temperature", cabin_status.cpu_temperature);
         cabin_info_json.Replace("cabin_water_level", cabin_status.cabin_water_level);
         data = cabin_info_json.ToFormattedString();
-        publish(CABIN_INFO_TOPIC, data.c_str(), data.size());
+        cabin_info_node.publish(CABIN_INFO_TOPIC, data.c_str(), data.size());
 
         osDelay(1000);
     }

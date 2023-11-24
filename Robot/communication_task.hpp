@@ -25,6 +25,5 @@ const int32_t* get_thruster_cmdPrt();
 #include "thruster_task.hpp"
 #include <string>
 
-bool publish(const char* topic, const char* payload, uint32_t payload_len);
 
 #endif /* COMMUNICATION_TASK_HPP */

@@ -26,7 +26,7 @@
 #include "main.h"
 
 #include "CJsonObject.hpp"
-#include "communication_task.hpp"
+#include "mqtt_client.hpp"
 
 static osThreadId altimeter_task_handle;
 
@@ -40,6 +40,10 @@ uint8_t altimeter_rx_buf[2][2*ISA500::AM_DATA_LENGTH];
 static void altimeter_task(void const * argument)
 {
     Altimeter* altimeter = &isa500;
+
+    //初始化mqtt
+    mqtt::Client altimeter_node = mqtt::Client("altimeter_node");
+    altimeter_node.connect(MQTT_SERVER_IP);
 
     neb::CJsonObject alitimeter_json;
     alitimeter_json.Add("height", (float)0.0);
@@ -72,7 +76,7 @@ static void altimeter_task(void const * argument)
         //上传数据
         alitimeter_json.Replace("height", altimeter->get_altimeter_data());
         std::string data = alitimeter_json.ToFormattedString();
-        publish(ALTIMETER_TOPIC, data.c_str(), data.size());
+        altimeter_node.publish(ALTIMETER_TOPIC, data.c_str(), data.size());
         
     }
 }

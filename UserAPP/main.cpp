@@ -76,9 +76,9 @@ void Main(void)
     commuication_task_start();
 
     cabin_info_task_start();
-    // imu_task_start();
-    // altimeter_task_start();
-    // depth_task_start();
+    imu_task_start();
+    altimeter_task_start();
+    depth_task_start();
     led_task_start();
     thruster_task_start();
     servo_task_start();
