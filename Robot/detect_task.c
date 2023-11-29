@@ -70,7 +70,7 @@ static void detect_task(void const *pvParameters)
 const osThreadDef_t os_thread_def_detetc = {
     .name = (char*)"detetc",
     .pthread = detect_task,
-    .tpriority = osPriorityRealtime,
+    .tpriority = osPriorityNormal,
     .instances = 0,
     .stacksize = 128
 };

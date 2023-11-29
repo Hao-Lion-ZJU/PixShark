@@ -4,7 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "usart.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
 #include "bsp_usart3.h"

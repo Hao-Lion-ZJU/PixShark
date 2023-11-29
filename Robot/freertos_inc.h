@@ -8,8 +8,9 @@ extern "C" {
 //List of mutexes
 extern osMutexId pub_mutex;
 
-
-
+extern osSemaphoreId altimeter_sem;
+extern osSemaphoreId imu_sem;
+extern osSemaphoreId com_sem;
 // List of Tasks
 /*--------------------------------- System Tasks -------------------------------------*/
 extern osThreadId defaultTaskHandle;      // Usage: 1024 Bytes stack

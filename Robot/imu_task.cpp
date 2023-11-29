@@ -24,7 +24,7 @@
 #include "bsp_usart.h"
 #include "RobotConfig.h"
 #include "main.h"
-
+#include "freertos_inc.h"
 #include "CJsonObject.hpp"
 #include "mqtt_client.hpp"
 
@@ -59,9 +59,10 @@ static void imu_task(void const * argument)
     for(;;)
     {
         //等待串口中断
-        while (ulTaskNotifyTake(pdTRUE, portMAX_DELAY) != pdPASS)
-        {
-        }
+        // while (ulTaskNotifyTake(pdTRUE, portMAX_DELAY) != pdPASS)
+        // {
+        // }
+        osSemaphoreWait(imu_sem, osWaitForever);
         //清除Cache缓存
 		SCB_InvalidateDCache_by_Addr ((uint32_t *)imu_rx_buf, 2*2*LPMS::IMU_DATA_LENGTH);
 		//轮询判断是否接收到了定长的数据
@@ -101,17 +102,18 @@ void imu_irq_callback(void)
     //调度器还未启动时不发送任务通知
     if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED && is_imu_task_runing)
     {
-        static BaseType_t xHigherPriorityTaskWoken;
-        vTaskNotifyGiveFromISR(imu_task_handle, &xHigherPriorityTaskWoken);
-        //有优先级高的任务准备就绪，立即进行一次任务切换
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        // static BaseType_t xHigherPriorityTaskWoken;
+        // vTaskNotifyGiveFromISR(imu_task_handle, &xHigherPriorityTaskWoken);
+        // //有优先级高的任务准备就绪，立即进行一次任务切换
+        // portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        osSemaphoreRelease(imu_sem);
     }
 }
 
 const osThreadDef_t os_thread_def_imu = {
     .name = (char*)"imu",
     .pthread = imu_task,
-    .tpriority = osPriorityHigh,
+    .tpriority = osPriorityRealtime,
     .instances = 0,
     .stacksize = 256
 };

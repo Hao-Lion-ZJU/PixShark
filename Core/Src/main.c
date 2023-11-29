@@ -95,7 +95,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  SCB->CACR|=1<<2;   //�???坯D-chache逝写，坦则产生莫坝其妙错�???
+  SCB->CACR|=1<<2;   //�??????坯D-chache逝写，坦则产生莫坝其妙错�??????
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -108,7 +108,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_IWDG1_Init();
+  // MX_IWDG1_Init();
   /* USER CODE BEGIN 2 */
   
   /**?????????????MCU????*/
@@ -116,7 +116,7 @@ int main(void)
   // MX_I2C1_Init();
   // MX_SPI4_Init();
   MX_UART4_Init();
-  MX_USART1_UART_Init();
+  // MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   MX_USART6_UART_Init();

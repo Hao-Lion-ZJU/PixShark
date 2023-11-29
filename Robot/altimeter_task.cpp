@@ -23,7 +23,7 @@
 #include "altimeter.hpp"
 #include "bsp_usart.h"
 #include "RobotConfig.h"
-#include "main.h"
+#include "freertos_inc.h"
 
 #include "CJsonObject.hpp"
 #include "mqtt_client.hpp"
@@ -53,10 +53,11 @@ static void altimeter_task(void const * argument)
     UARTDMAStatus_t status = UART_DMA_NO_OK;
     for(;;)
     {
-        //等待串口中断
-        while (ulTaskNotifyTake(pdTRUE, portMAX_DELAY) != pdPASS)
-        {
-        }
+        // //等待串口中断
+        // while (ulTaskNotifyTake(pdTRUE, portMAX_DELAY) != pdPASS)
+        // {
+        // }
+        osSemaphoreWait(altimeter_sem, osWaitForever);
         //清除Cache缓存
 		SCB_InvalidateDCache_by_Addr ((uint32_t *)altimeter_rx_buf, 2*2*ISA500::AM_DATA_LENGTH);
         //轮询判断是否接收到了定长的数据
@@ -95,10 +96,11 @@ void altimeter_irq_callback(void)
     //调度器还未启动时不发送任务通知
     if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED && is_altimeter_task_runing)
     {
-        static BaseType_t xHigherPriorityTaskWoken;
-        vTaskNotifyGiveFromISR(altimeter_task_handle, &xHigherPriorityTaskWoken);
-        //有优先级高的任务准备就绪，立即进行一次任务切换
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        // static BaseType_t xHigherPriorityTaskWoken;
+        // vTaskNotifyGiveFromISR(altimeter_task_handle, &xHigherPriorityTaskWoken);
+        // //有优先级高的任务准备就绪，立即进行一次任务切换
+        // portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        osSemaphoreRelease(altimeter_sem);
     }
 }
 
@@ -114,9 +116,9 @@ Altimeter* get_altimeter_point(void)
 const osThreadDef_t os_thread_def_altimeter = {
     .name = (char*)"altimeter",
     .pthread = altimeter_task,
-    .tpriority = osPriorityHigh,
+    .tpriority = osPriorityRealtime,
     .instances = 0,
-    .stacksize = 128
+    .stacksize = 256
 };
 
 void altimeter_task_start(void)

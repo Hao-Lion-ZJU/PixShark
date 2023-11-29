@@ -23,7 +23,6 @@
 #include "CRC8_CRC16.h"
 #include "common.hpp"
 
-
 /**
  * @brief 深度计基类的构造函数，初始化depth_data
  * @retval none
@@ -37,6 +36,7 @@ Depth::Depth(){
 void KELLER::write(void * data, uint16_t len)
 {
    bsp_usart_transmit(DEPTH_UART_CHANNEL, (uint8_t *)data, len);
+  // HAL_UART_Transmit(&huart6, (uint8_t *)data, len,  100);
 }
 
 

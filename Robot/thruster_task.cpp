@@ -25,7 +25,7 @@
 #include "filter.hpp"
 
 #define THRUSTER_CONTROL_PERIOD_MS 5
-#define THRUSTER_FILTER_PARAM 0.3333333333f
+#define THRUSTER_FILTER_PARAM 0.667f
 #define THRUSTER_DEADLINE 50
 osThreadId thruster_task_handle;
 

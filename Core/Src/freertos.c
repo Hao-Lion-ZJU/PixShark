@@ -52,8 +52,9 @@
 //List of mutexes
 osMutexId pub_mutex;
 // List of semaphores
-
-
+osSemaphoreId altimeter_sem;
+osSemaphoreId com_sem;
+osSemaphoreId imu_sem;
 // Events
 
 //List of message queues
@@ -134,7 +135,14 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
-  
+  osSemaphoreDef(altimeter_sem);
+  altimeter_sem = osSemaphoreCreate(osSemaphore(altimeter_sem), 1);
+
+  osSemaphoreDef(imu_sem);
+  imu_sem = osSemaphoreCreate(osSemaphore(imu_sem), 1);
+
+  osSemaphoreDef(com_sem);
+  com_sem = osSemaphoreCreate(osSemaphore(com_sem), 1);
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* USER CODE BEGIN RTOS_TIMERS */

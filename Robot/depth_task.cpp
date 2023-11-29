@@ -51,7 +51,7 @@ static void depth_task(void const * argument)
     depth_json.Add("depth", (float)0.0);
     
     //初始化串口
-    bsp_usart_init(DEPTH_UART_CHANNEL, depth_rx_buf[0], depth_rx_buf[1], 2*KELLER::DEPTH_DATA_LENGTH);
+    // bsp_usart_init(DEPTH_UART_CHANNEL, depth_rx_buf[0], depth_rx_buf[1], 2*KELLER::DEPTH_DATA_LENGTH);
     UARTDMAStatus_t status = UART_DMA_NO_OK;
     for(;;)
     {
@@ -95,7 +95,8 @@ static void depth_request_task(void const * argument)
     KELLER* kellerPtr = dynamic_cast<KELLER*>(dm);
     //任务开始前延时一段时间,等待接收线程准备就绪
     vTaskDelay(357);
-    
+    //初始化串口
+    bsp_usart_init(DEPTH_UART_CHANNEL, depth_rx_buf[0], depth_rx_buf[1], 2*KELLER::DEPTH_DATA_LENGTH);
     for(;;)
     {
         kellerPtr->request_depth_data();
@@ -129,7 +130,7 @@ void depth_irq_callback(void)
 const osThreadDef_t os_thread_def_depth = {
     .name = (char*)"depth",
     .pthread = depth_task,
-    .tpriority = osPriorityHigh,
+    .tpriority = osPriorityRealtime,
     .instances = 0,
     .stacksize = 128
 };
@@ -137,7 +138,7 @@ const osThreadDef_t os_thread_def_depth = {
 const osThreadDef_t os_thread_def_depth_request = {
     .name = (char*)"depth_request",
     .pthread = depth_request_task,
-    .tpriority = osPriorityHigh,
+    .tpriority = osPriorityNormal,
     .instances = 0,
     .stacksize = 128
 };

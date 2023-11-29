@@ -26,7 +26,6 @@ static std::string pay_load;
 static mqtt::Client* recv_nodePtr = NULL;
 
 
-
 static uint32 brightness;
 static int32 servo_angle;
 static int32 thruster_cmd[6] = {0};
@@ -51,8 +50,8 @@ static void on_data(void *this_client, const u8_t *data, u16_t len, u8_t flags)
 {
     
     pay_load = std::string((const char*)data, len);
-    
-    xTaskNotifyGive(commuication_task_handle);
+    osSemaphoreRelease(com_sem);
+    // xTaskNotifyGive(commuication_task_handle);
 }
 
 void communication_task(const void *arg)
@@ -70,16 +69,17 @@ void communication_task(const void *arg)
     recv_nodePtr->subscribe(THRUSTER_TOPIC);
 
     //创建一个定时器，定时检测连接状态了
-    osTimerDef(check_timer, check_connection);
-    osTimerId check_timer_handle = osTimerCreate(osTimer(check_timer), osTimerPeriodic,(void*)0);
-    osTimerStart(check_timer_handle, 5000);  //5s检查一次
+    // osTimerDef(check_timer, check_connection);
+    // osTimerId check_timer_handle = osTimerCreate(osTimer(check_timer), osTimerPeriodic,(void*)0);
+    // osTimerStart(check_timer_handle, 5000);  //5s检查一次
 
     for(;;)
     {
         //等待控制指令
-        while (ulTaskNotifyTake(pdTRUE, portMAX_DELAY) != pdPASS)//
-        {
-        }
+        // while (ulTaskNotifyTake(pdTRUE, portMAX_DELAY) != pdPASS)
+        // {
+        // }
+        osSemaphoreWait(com_sem, osWaitForever);
         neb::CJsonObject result(pay_load);
         
         if(recv_topic.compare(LED_TOPIC) == 0){
@@ -101,8 +101,6 @@ void communication_task(const void *arg)
             result.Get("hbr", thruster_cmd[4]);
             result.Get("hbl", thruster_cmd[5]);
         }
-
-        
     }
 }
 

@@ -96,12 +96,12 @@ include_directories(
   components/algorithm
   components/controller
   components/devices
-  components/suport
-  components/suport/crc
-  components/suport/fifo
-  components/suport/mqtt
-  components/suport/json
-  components/suport/udp
+  components/support
+  components/support/crc
+  components/support/fifo
+  components/support/mqtt
+  components/support/json
+  components/support/udp
   UserApp
 
 )
