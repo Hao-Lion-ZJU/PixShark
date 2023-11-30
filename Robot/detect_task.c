@@ -56,13 +56,14 @@ static void detect_task(void const *pvParameters)
     static uint32_t system_time;
     system_time = xTaskGetTickCount();
     //创建一个定时器，定时喂狗
-    osTimerDef(IWDG, feed_dog);
-    osTimerId IWDG_handle = osTimerCreate(osTimer(IWDG), osTimerPeriodic,(void*)0);
+    // osTimerDef(IWDG, feed_dog);
+    // osTimerId IWDG_handle = osTimerCreate(osTimer(IWDG), osTimerPeriodic,(void*)0);
     feed_dog(NULL);//先喂一次狗
-    osTimerStart(IWDG_handle, 1000);  //
+    // osTimerStart(IWDG_handle, 1000);  //
     while (1)
     {
-      osDelay(10000);
+      feed_dog(NULL);
+      osDelay(1000);
     }
 }
 

@@ -58,22 +58,24 @@ void KELLER::depth_data_solve(volatile const uint8_t *depth_frame)
     //TODO:进行深度计数据解析
     else if (depth_frame[0] == 0x01 && depth_frame[1] == 0x03 &&  depth_frame[2] == 0x04 && verify_CRC16_check_sum((uint8_t *)depth_frame, 9))
     {
-      if(!restart_flag) // 深度前5次读取的气压值求平均作为大气压参考值
-      {
-        //深度计发上来的为大端存储
-        sum += Byte_to_Float((uint8_t *)&depth_frame[3], true);
-        i--;
-        if (i == 0)
-        {
-          restart_flag = true;
-          atmosphere = sum/5.0f;
-        }
-      }
-      else
-      {
-        pressure1 = Byte_to_Float((uint8_t *)&depth_frame[3], true);
-        depth_data = (pressure1 - atmosphere) * 100000.0f / (g * WATER_DENSITY);
-      }
+      // if(!restart_flag) // 深度前5次读取的气压值求平均作为大气压参考值
+      // {
+      //   //深度计发上来的为大端存储
+      //   sum += Byte_to_Float((uint8_t *)&depth_frame[3], true);
+      //   i--;
+      //   if (i == 0)
+      //   {
+      //     restart_flag = true;
+      //     atmosphere = sum/5.0f;
+      //   }
+      // }
+      // else
+      // {
+      //   pressure1 = Byte_to_Float((uint8_t *)&depth_frame[3], true);
+      //   depth_data = (pressure1 - atmosphere) * 100000.0f / (g * WATER_DENSITY);
+      // }
+      pressure1 = Byte_to_Float((uint8_t *)&depth_frame[3], true);
+      depth_data = (pressure1 - 0.017f) * 100000.0f / (g * WATER_DENSITY); //0.017为大气压
     }
 }
 
